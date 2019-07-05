@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import withStyles from '@material-ui/styles/withStyles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import AppIcon from '../images/thought.png';
 import axios from 'axios';
@@ -12,31 +12,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const styles = {
-  form: {
-    textAlign: 'center'
-  },
-  image: {
-    margin: '20px auto 20px auto'
-  },
-  pageTitle: {
-    margin: '10px auto 10px auto'
-  },
-  textField: {
-    margin: '10px auto 20px auto'
-  },
-  button: {
-    position: 'relative'
-  },
-  customError: {
-    color: 'red',
-    fontSize: '0.8rem',
-    margin: 5
-  },
-  progress: {
-    position: 'absolute'
-  }
-};
+// from app.js
+const styles = theme => ({
+  ...theme
+});
 
 const Login = props => {
   const { classes } = props;
@@ -60,8 +39,8 @@ const Login = props => {
     axios
       .post('/login', userData)
       .then(res => {
-        console.log(res.data);
         setForm({ ...form, loading: false });
+        localStorage.setItem('FBIdtoken', `Bearer ${res.data.token}`);
         props.history.push('/');
       })
       .catch(err => {
@@ -115,7 +94,7 @@ const Login = props => {
             type='submit'
             variant='contained'
             color='primary'
-            classname={classes.button}
+            className={classes.button}
             disabled={form.loading}
           >
             Login
