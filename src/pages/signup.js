@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import AppIcon from '../images/thought.png';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 // Material-ui
@@ -12,137 +11,164 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+// Redux
+import { connect } from 'react-redux';
+import { signupUser } from '../redux/actions/userActions';
+
 const styles = theme => ({
   // from app.js
   ...theme
 });
 
-const Signup = props => {
-  const { classes } = props;
+class Signup extends Component {
+  constructor() {
+    super();
 
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    handle: '',
-    loading: false,
-    errors: {}
-  });
+    this.state = {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      handle: '',
+      errors: {}
+    };
+  }
 
-  const handleSubmit = e => {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.ui.errors) {
+      this.setState({
+        errors: nextProps.ui.errors
+      });
+    }
+  }
+
+  handleSubmit = e => {
     e.preventDefault();
-    setForm({ ...form, loading: true });
+    this.setState({
+      loading: true
+    });
 
     const newUserData = {
-      email: form.email,
-      password: form.password,
-      confirmPassword: form.confirmPassword,
-      handle: form.handle
+      email: this.state.email,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword,
+      handle: this.state.handle
     };
 
-    axios
-      .post('/signup', newUserData)
-      .then(res => {
-        localStorage.setItem('FBIdtoken', `Bearer ${res.data.token}`);
-        setForm({ ...form, loading: false });
-        props.history.push('/');
-      })
-      .catch(err => {
-        setForm({ ...form, errors: err.response.data, loading: false });
-      });
+    this.props.signupUser(newUserData, this.props.history);
   };
 
-  const onChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
 
-  return (
-    <Grid container className={classes.form}>
-      <Grid item sm />
-      <Grid item sm>
-        <img src={AppIcon} alt='thoughtBubble' className={classes.image} />
-        <Typography variant='h2' className={classes.pageTitle}>
-          Signup
-        </Typography>
-        <form noValidate onSubmit={handleSubmit}>
-          <TextField
-            id='handle'
-            name='handle'
-            type='text'
-            label='Username'
-            className={classes.textField}
-            helperText={form.errors.handle}
-            error={form.errors.handle ? true : false}
-            value={form.handle}
-            onChange={onChange}
-            fullWidth
-          />
-          <TextField
-            id='email'
-            name='email'
-            type='email'
-            label='Email'
-            className={classes.textField}
-            helperText={form.errors.email}
-            error={form.errors.email ? true : false}
-            value={form.email}
-            onChange={onChange}
-            fullWidth
-          />
-          <TextField
-            id='password'
-            name='password'
-            type='password'
-            label='Password'
-            className={classes.textField}
-            helperText={form.errors.password}
-            error={form.errors.password ? true : false}
-            value={form.password}
-            onChange={onChange}
-            fullWidth
-          />
-          <TextField
-            id='confirmPassword'
-            name='confirmPassword'
-            type='password'
-            label='Confirm Password'
-            className={classes.textField}
-            helperText={form.errors.confirmPassword}
-            error={form.errors.confirmPassword ? true : false}
-            value={form.confirmPassword}
-            onChange={onChange}
-            fullWidth
-          />
-          {form.errors.general && (
-            <Typography variant='body2' className={classes.customError}>
-              {form.errors.general}
-            </Typography>
-          )}
-          <Button
-            type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.button}
-            disabled={form.loading}
-          >
+  render() {
+    const {
+      classes,
+      ui: { loading }
+    } = this.props;
+    const { errors } = this.state;
+
+    return (
+      <Grid container className={classes.form}>
+        <Grid item sm />
+        <Grid item sm>
+          <img src={AppIcon} alt='thoughtBubble' className={classes.image} />
+          <Typography variant='h2' className={classes.pageTitle}>
             Signup
-            {form.loading && (
-              <CircularProgress size={30} className={classes.progress} />
+          </Typography>
+          <form noValidate onSubmit={this.handleSubmit}>
+            <TextField
+              id='handle'
+              name='handle'
+              type='text'
+              label='Username'
+              className={classes.textField}
+              helperText={errors.handle}
+              error={errors.handle ? true : false}
+              value={this.state.handle}
+              onChange={this.onChange}
+              fullWidth
+            />
+            <TextField
+              id='email'
+              name='email'
+              type='email'
+              label='Email'
+              className={classes.textField}
+              helperText={errors.email}
+              error={errors.email ? true : false}
+              value={this.state.email}
+              onChange={this.onChange}
+              fullWidth
+            />
+            <TextField
+              id='password'
+              name='password'
+              type='password'
+              label='Password'
+              className={classes.textField}
+              helperText={errors.password}
+              error={errors.password ? true : false}
+              value={this.state.password}
+              onChange={this.onChange}
+              fullWidth
+            />
+            <TextField
+              id='confirmPassword'
+              name='confirmPassword'
+              type='password'
+              label='Confirm Password'
+              className={classes.textField}
+              helperText={errors.confirmPassword}
+              error={errors.confirmPassword ? true : false}
+              value={this.state.confirmPassword}
+              onChange={this.onChange}
+              fullWidth
+            />
+            {errors.general && (
+              <Typography variant='body2' className={classes.customError}>
+                {errors.general}
+              </Typography>
             )}
-          </Button>
-          <br />
-          <small>
-            Already have an account? <Link to='/login'>Login</Link>
-          </small>
-        </form>
+            <Button
+              type='submit'
+              variant='contained'
+              color='primary'
+              className={classes.button}
+              disabled={loading}
+            >
+              Signup
+              {loading && (
+                <CircularProgress size={30} className={classes.progress} />
+              )}
+            </Button>
+            <br />
+            <small>
+              Already have an account? <Link to='/login'>Login</Link>
+            </small>
+          </form>
+        </Grid>
+        <Grid item sm />
       </Grid>
-      <Grid item sm />
-    </Grid>
-  );
-};
+    );
+  }
+}
 
 Signup.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  ui: PropTypes.object.isRequired,
+  signupUser: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(Signup);
+const mapStateToProps = state => ({
+  user: state.user,
+  ui: state.ui
+});
+
+export default connect(
+  mapStateToProps,
+  { signupUser }
+)(withStyles(styles)(Signup));

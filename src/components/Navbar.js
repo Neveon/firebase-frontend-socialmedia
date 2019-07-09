@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Specifying imports for treeshaking
+import { Link } from 'react-router-dom';
 
 // @material-ui
 import AppBar from '@material-ui/core/AppBar';

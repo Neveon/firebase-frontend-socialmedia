@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import AppIcon from '../images/thought.png';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+
+// Redux
+import { connect } from 'react-redux';
+import { loginUser } from '../redux/actions/userActions';
 
 // Material-ui
 import Grid from '@material-ui/core/Grid';
@@ -17,104 +20,127 @@ const styles = theme => ({
   ...theme
 });
 
-const Login = props => {
-  const { classes } = props;
+class Login extends Component {
+  constructor() {
+    super();
 
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-    loading: false,
-    errors: {}
-  });
+    this.state = {
+      email: '',
+      password: '',
+      errors: {}
+    };
+  }
 
-  const handleSubmit = e => {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.ui.errors) {
+      this.setState({
+        errors: nextProps.ui.errors
+      });
+    }
+  }
+
+  handleSubmit = e => {
     e.preventDefault();
-    setForm({ ...form, loading: true });
 
     const userData = {
-      email: form.email,
-      password: form.password
+      email: this.state.email,
+      password: this.state.password
     };
-
-    axios
-      .post('/login', userData)
-      .then(res => {
-        setForm({ ...form, loading: false });
-        localStorage.setItem('FBIdtoken', `Bearer ${res.data.token}`);
-        props.history.push('/');
-      })
-      .catch(err => {
-        setForm({ ...form, errors: err.response.data, loading: false });
-      });
+    this.props.loginUser(userData, this.props.history);
   };
 
-  const onChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
 
-  return (
-    <Grid container className={classes.form}>
-      <Grid item sm />
-      <Grid item sm>
-        <img src={AppIcon} alt='thoughtBubble' className={classes.image} />
-        <Typography variant='h2' className={classes.pageTitle}>
-          Login
-        </Typography>
-        <form noValidate onSubmit={handleSubmit}>
-          <TextField
-            id='email'
-            name='email'
-            type='email'
-            label='Email'
-            className={classes.textField}
-            helperText={form.errors.email}
-            error={form.errors.email ? true : false}
-            value={form.email}
-            onChange={onChange}
-            fullWidth
-          />
-          <TextField
-            id='password'
-            name='password'
-            type='password'
-            label='Password'
-            className={classes.textField}
-            helperText={form.errors.password}
-            error={form.errors.password ? true : false}
-            value={form.password}
-            onChange={onChange}
-            fullWidth
-          />
-          {form.errors.general && (
-            <Typography variant='body2' className={classes.customError}>
-              {form.errors.general}
-            </Typography>
-          )}
-          <Button
-            type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.button}
-            disabled={form.loading}
-          >
+  render() {
+    const {
+      classes,
+      ui: { loading }
+    } = this.props;
+    const { errors } = this.state;
+
+    return (
+      <Grid container className={classes.form}>
+        <Grid item sm />
+        <Grid item sm>
+          <img src={AppIcon} alt='thoughtBubble' className={classes.image} />
+          <Typography variant='h2' className={classes.pageTitle}>
             Login
-            {form.loading && (
-              <CircularProgress size={30} className={classes.progress} />
+          </Typography>
+          <form noValidate onSubmit={this.handleSubmit}>
+            <TextField
+              id='email'
+              name='email'
+              type='email'
+              label='Email'
+              className={classes.textField}
+              helperText={errors.email}
+              error={errors.email ? true : false}
+              value={this.state.email}
+              onChange={this.onChange}
+              fullWidth
+            />
+            <TextField
+              id='password'
+              name='password'
+              type='password'
+              label='Password'
+              className={classes.textField}
+              helperText={errors.password}
+              error={errors.password ? true : false}
+              value={this.state.password}
+              onChange={this.onChange}
+              fullWidth
+            />
+            {errors.general && (
+              <Typography variant='body2' className={classes.customError}>
+                {errors.general}
+              </Typography>
             )}
-          </Button>
-          <br />
-          <small>
-            Don't have an account? <Link to='/signup'>Sign up</Link>
-          </small>
-        </form>
+            <Button
+              type='submit'
+              variant='contained'
+              color='primary'
+              className={classes.button}
+              disabled={loading}
+            >
+              Login
+              {loading && (
+                <CircularProgress size={30} className={classes.progress} />
+              )}
+            </Button>
+            <br />
+            <small>
+              Don't have an account? <Link to='/signup'>Sign up</Link>
+            </small>
+          </form>
+        </Grid>
+        <Grid item sm />
       </Grid>
-      <Grid item sm />
-    </Grid>
-  );
-};
+    );
+  }
+}
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  ui: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Login);
+const mapStateToProps = state => ({
+  user: state.user,
+  ui: state.ui
+});
+
+const mapActionsToProps = {
+  loginUser
+};
+
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withStyles(styles)(Login));
