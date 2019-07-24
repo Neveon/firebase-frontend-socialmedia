@@ -3,7 +3,8 @@ import {
   LIKE_THOUGHT,
   UNLIKE_THOUGHT,
   LOADING_DATA,
-  DELETE_THOUGHT
+  DELETE_THOUGHT,
+  POST_THOUGHT
 } from '../types';
 
 const initialState = {
@@ -42,6 +43,11 @@ export default function(state = initialState, action) {
         thoughts: state.thoughts.filter(
           thought => thought.thoughtId !== action.payload
         )
+      };
+    case POST_THOUGHT:
+      return {
+        ...state,
+        thoughts: [action.payload, ...state.thoughts]
       };
     default:
       return state;

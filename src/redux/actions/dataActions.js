@@ -3,7 +3,11 @@ import {
   LOADING_DATA,
   LIKE_THOUGHT,
   UNLIKE_THOUGHT,
-  DELETE_THOUGHT
+  DELETE_THOUGHT,
+  LOADING_UI,
+  SET_ERRORS,
+  CLEAR_ERRORS,
+  POST_THOUGHT
 } from '../types';
 import axios from 'axios';
 
@@ -22,6 +26,28 @@ export const getThoughts = () => dispatch => {
       dispatch({
         type: SET_THOUGHTS,
         payload: []
+      });
+    });
+};
+
+// Post thought
+export const postThought = newThought => dispatch => {
+  dispatch({ type: LOADING_UI });
+  axios
+    .post('/thought', newThought)
+    .then(res => {
+      dispatch({
+        type: POST_THOUGHT,
+        payload: res.data
+      });
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data
       });
     });
 };
@@ -63,4 +89,9 @@ export const deleteThought = thoughtId => dispatch => {
       });
     })
     .catch(err => console.log(err));
+};
+
+// Clear errors - Fixes bug where error on submit post does not clear from state
+export const clearErrors = () => dispatch => {
+  dispatch({ type: CLEAR_ERRORS });
 };

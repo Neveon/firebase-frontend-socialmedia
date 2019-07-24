@@ -26,6 +26,12 @@ const styles = {
     left: '90%',
     bottom: '3%',
     color: '#ff5252'
+  },
+  deleteThoughtButton: {
+    color: 'red',
+    fontWeight: 600,
+    border: '1px solid red',
+    marginLeft: 10
   }
 };
 
@@ -72,7 +78,10 @@ export class DeleteThought extends Component {
             <Button onClick={this.handleClose} color='primary'>
               Cancel
             </Button>
-            <Button onClick={this.deleteThought} color='secondary'>
+            <Button
+              onClick={this.deleteThought}
+              className={classes.deleteThoughtButton}
+            >
               Delete
             </Button>
           </DialogActions>

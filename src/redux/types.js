@@ -14,3 +14,4 @@ export const SET_THOUGHT = 'SET_THOUGHT';
 export const LIKE_THOUGHT = 'LIKE_THOUGHT';
 export const UNLIKE_THOUGHT = 'UNLIKE_THOUGHT';
 export const DELETE_THOUGHT = 'DELETE_THOUGHT';
+export const POST_THOUGHT = 'POST_THOUGHT';
