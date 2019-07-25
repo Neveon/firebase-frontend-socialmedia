@@ -22,7 +22,7 @@ import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 
 // Redux
 import { connect } from 'react-redux';
-import { logoutUser, uploadImage } from '../redux/actions/userActions';
+import { logoutUser, uploadImage } from '../../redux/actions/userActions';
 
 const styles = theme => ({
   paper: {
@@ -151,7 +151,7 @@ class Profile extends Component {
               <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
             </div>
             <Tooltip title='Logout' placement='right'>
-              <IconButton onClick={this.handleLogout} >
+              <IconButton onClick={this.handleLogout}>
                 <KeyboardReturn color='primary' />
               </IconButton>
             </Tooltip>
