@@ -34,11 +34,15 @@ export default function(state = initialState, action) {
       };
     case LIKE_THOUGHT:
     case UNLIKE_THOUGHT:
-      // thought is returned, used to identify
+      // updated thought is returned, used to identify
       let index = state.thoughts.findIndex(
         thought => thought.thoughtId === action.payload.thoughtId
       );
-      state.thoughts[index] = action.payload; // replaced
+      state.thoughts[index] = action.payload;
+      // Updates dialog thought
+      if (state.thought.thoughtId === action.payload.thoughtId) {
+        state.thought = action.payload;
+      }
       return {
         ...state
       };
