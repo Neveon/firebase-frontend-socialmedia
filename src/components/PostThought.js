@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MyButton from '../util/MyButton';
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
@@ -14,7 +15,6 @@ import CloseIcon from '@material-ui/icons/Close';
 // Redux
 import { connect } from 'react-redux';
 import { postThought, clearErrors } from '../redux/actions/dataActions';
-import MyButton from '../util/MyButton';
 
 const styles = theme => ({
   ...theme,

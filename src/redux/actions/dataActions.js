@@ -7,7 +7,9 @@ import {
   LOADING_UI,
   SET_ERRORS,
   CLEAR_ERRORS,
-  POST_THOUGHT
+  POST_THOUGHT,
+  SET_THOUGHT,
+  STOP_LOADING_UI
 } from '../types';
 import axios from 'axios';
 
@@ -28,6 +30,21 @@ export const getThoughts = () => dispatch => {
         payload: []
       });
     });
+};
+
+// Get details of one user's thought
+export const getThought = thoughtId => dispatch => {
+  dispatch({ type: LOADING_UI });
+  axios
+    .get(`/thought/${thoughtId}`)
+    .then(res => {
+      dispatch({
+        type: SET_THOUGHT,
+        payload: res.data
+      });
+      dispatch({ type: STOP_LOADING_UI });
+    })
+    .catch(err => console.log(err));
 };
 
 // Post thought

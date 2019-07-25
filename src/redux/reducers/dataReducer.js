@@ -4,7 +4,8 @@ import {
   UNLIKE_THOUGHT,
   LOADING_DATA,
   DELETE_THOUGHT,
-  POST_THOUGHT
+  POST_THOUGHT,
+  SET_THOUGHT
 } from '../types';
 
 const initialState = {
@@ -25,6 +26,11 @@ export default function(state = initialState, action) {
         ...state,
         thoughts: action.payload,
         loading: false
+      };
+    case SET_THOUGHT:
+      return {
+        ...state,
+        thought: action.payload
       };
     case LIKE_THOUGHT:
     case UNLIKE_THOUGHT:
