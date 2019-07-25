@@ -22,11 +22,11 @@ export class LikeButton extends Component {
   };
 
   userLike = () => {
-    likeThought(this.props.thoughtId);
+    this.props.likeThought(this.props.thoughtId);
   };
 
   userUnlike = () => {
-    unlikeThought(this.props.thoughtId);
+    this.props.unlikeThought(this.props.thoughtId);
   };
 
   render() {
