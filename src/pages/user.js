@@ -13,12 +13,21 @@ import { getUserData } from '../redux/actions/dataActions';
 
 export class user extends Component {
   state = {
-    profile: null
+    profile: null,
+    thoughtIdParam: null
   };
 
   componentDidMount() {
     // React Router sends the extra prop 'match' down to the route component we access here
     const handle = this.props.match.params.handle;
+    const thoughtId = this.props.match.params.thoughtId; // Undefined if only on user's page
+
+    if (thoughtId) {
+      this.setState({
+        thoughtIdParam: thoughtId
+      });
+    }
+
     this.props.getUserData(handle); // sets thoughts
     axios
       .get(`/user/${handle}`) // sets static profile state
@@ -32,15 +41,26 @@ export class user extends Component {
 
   render() {
     const { thoughts, loading } = this.props.data;
+    const { thoughtIdParam } = this.state;
 
     const thoughtsMarkup = loading ? (
       <p>Loading Data</p>
     ) : thoughts === null ? (
       <p>No thoughts from this user</p>
-    ) : (
+    ) : !thoughtIdParam ? (
       thoughts.map(thought => (
         <Thought key={thought.thoughtId} thought={thought} />
       ))
+    ) : (
+      thoughts.map(thought => {
+        if (thought.thoughtId !== thoughtIdParam) {
+          return <Thought key={thought.thoughtId} thought={thought} />;
+        } else {
+          return (
+            <Thought key={thought.thoughtId} thought={thought} openDialog />
+          );
+        }
+      })
     );
 
     return (

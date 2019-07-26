@@ -53,6 +53,13 @@ class ThoughtDialog extends Component {
     open: false
   };
 
+  componentDidMount() {
+    // passed from user -> thought -> props
+    if (this.props.openDialog) {
+      this.handleOpen();
+    }
+  }
+
   handleOpen = () => {
     this.setState({ open: true });
     this.props.getThought(this.props.thoughtId); // request to server to get thought details
