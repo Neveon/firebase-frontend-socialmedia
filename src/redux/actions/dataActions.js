@@ -9,7 +9,8 @@ import {
   CLEAR_ERRORS,
   POST_THOUGHT,
   SET_THOUGHT,
-  STOP_LOADING_UI
+  STOP_LOADING_UI,
+  SUBMIT_COMMENT
 } from '../types';
 import axios from 'axios';
 
@@ -57,9 +58,26 @@ export const postThought = newThought => dispatch => {
         type: POST_THOUGHT,
         payload: res.data
       });
+      dispatch(clearErrors());
+    })
+    .catch(err => {
       dispatch({
-        type: CLEAR_ERRORS
+        type: SET_ERRORS,
+        payload: err.response.data
       });
+    });
+};
+
+// Submit a comment
+export const submitComment = (thoughtId, commentData) => dispatch => {
+  axios
+    .post(`/thought/${thoughtId}/comment`, commentData)
+    .then(res => {
+      dispatch({
+        type: SUBMIT_COMMENT,
+        payload: res.data
+      });
+      dispatch(clearErrors());
     })
     .catch(err => {
       dispatch({
@@ -109,6 +127,7 @@ export const deleteThought = thoughtId => dispatch => {
 };
 
 // Clear errors - Fixes bug where error on submit post does not clear from state
+// action creator
 export const clearErrors = () => dispatch => {
   dispatch({ type: CLEAR_ERRORS });
 };

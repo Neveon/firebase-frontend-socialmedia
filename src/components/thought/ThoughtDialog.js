@@ -4,7 +4,8 @@ import MyButton from '../../util/MyButton';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import LikeButton from './LikeButton';
-
+import Comments from './Comments';
+import CommentForm from './CommentForm';
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,14 +19,10 @@ import UnfoldMore from '@material-ui/icons/UnfoldMore';
 import ChatIcon from '@material-ui/icons/Chat';
 // Redux
 import { connect } from 'react-redux';
-import { getThought } from '../../redux/actions/dataActions';
+import { getThought, clearErrors } from '../../redux/actions/dataActions';
 
 const styles = theme => ({
   ...theme,
-  invisibleRule: {
-    border: 'none',
-    margin: 4
-  },
   profileImage: {
     maxWidth: 200,
     height: 200,
@@ -62,6 +59,7 @@ class ThoughtDialog extends Component {
   };
   handleClose = () => {
     this.setState({ open: false });
+    this.props.clearErrors();
   };
 
   render() {
@@ -75,7 +73,8 @@ class ThoughtDialog extends Component {
         likeCount,
         commentCount,
         userImage,
-        userHandle
+        userHandle,
+        comments
       },
       ui: { loading }
     } = this.props;
@@ -119,6 +118,9 @@ class ThoughtDialog extends Component {
             <span>{commentCount} comment</span>
           )}
         </Grid>
+        <hr className={classes.visibleRule} />
+        <CommentForm thoughtId={thoughtId} />
+        <Comments comments={comments} />
       </Grid>
     );
 
@@ -158,7 +160,8 @@ ThoughtDialog.propTypes = {
   thoughtId: PropTypes.string.isRequired,
   userHandle: PropTypes.string.isRequired,
   thought: PropTypes.object.isRequired,
-  ui: PropTypes.object.isRequired
+  ui: PropTypes.object.isRequired,
+  clearErrors: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -167,7 +170,8 @@ const mapStateToProps = state => ({
 });
 
 const mapActionsToProps = {
-  getThought
+  getThought,
+  clearErrors
 };
 
 export default connect(

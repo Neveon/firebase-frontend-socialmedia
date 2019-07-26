@@ -5,7 +5,8 @@ import {
   LOADING_DATA,
   DELETE_THOUGHT,
   POST_THOUGHT,
-  SET_THOUGHT
+  SET_THOUGHT,
+  SUBMIT_COMMENT
 } from '../types';
 
 const initialState = {
@@ -41,7 +42,10 @@ export default function(state = initialState, action) {
       state.thoughts[index] = action.payload;
       // Updates dialog thought
       if (state.thought.thoughtId === action.payload.thoughtId) {
+        // hold comments in temp var and load into new var
+        let temp = state.thought.comments;
         state.thought = action.payload;
+        state.thought.comments = temp;
       }
       return {
         ...state
@@ -58,6 +62,14 @@ export default function(state = initialState, action) {
       return {
         ...state,
         thoughts: [action.payload, ...state.thoughts]
+      };
+    case SUBMIT_COMMENT:
+      return {
+        ...state,
+        thought: {
+          ...state.thought,
+          comments: [action.payload, ...state.thought.comments]
+        }
       };
     default:
       return state;
