@@ -132,7 +132,7 @@ export const getUserData = userHandle => dispatch => {
     .get(`/user/${userHandle}`)
     .then(res => {
       dispatch({
-        type: SET_THOUGHT,
+        type: SET_THOUGHTS,
         payload: res.data.thoughts
       });
     })
