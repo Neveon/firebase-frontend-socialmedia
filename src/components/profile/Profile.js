@@ -44,7 +44,7 @@ const styles = theme => ({
         visibility: 'visible'
       },
       '& .profile-image': {
-        opacity: 0.5
+        opacity: 0.4
       }
     },
     '& .profile-image': {
