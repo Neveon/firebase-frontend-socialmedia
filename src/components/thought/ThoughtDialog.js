@@ -50,7 +50,9 @@ const styles = theme => ({
 
 class ThoughtDialog extends Component {
   state = {
-    open: false
+    open: false,
+    oldPath: '',
+    newPath: ''
   };
 
   componentDidMount() {
@@ -61,10 +63,21 @@ class ThoughtDialog extends Component {
   }
 
   handleOpen = () => {
-    this.setState({ open: true });
+    // url after user opens dialog
+    let oldPath = window.location.pathname;
+    const { userHandle, thoughtId } = this.props; // passed from thought.js
+    const newPath = `/users/${userHandle}/thought/${thoughtId}`;
+
+    // Handling no old paths - when users use the specific post link from another page
+    if (oldPath === newPath) oldPath = `/users/${userHandle}`;
+
+    window.history.pushState(null, null, newPath);
+
+    this.setState({ open: true, oldPath, newPath });
     this.props.getThought(this.props.thoughtId); // request to server to get thought details
   };
   handleClose = () => {
+    window.history.pushState(null, null, this.state.oldPath);
     this.setState({ open: false });
     this.props.clearErrors();
   };
