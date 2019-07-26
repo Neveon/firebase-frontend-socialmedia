@@ -34,8 +34,17 @@ const styles = theme => ({
       position: 'relative',
       '& button': {
         position: 'absolute',
-        top: '80%',
-        left: '70%'
+        top: '40%',
+        left: '45%',
+        visibility: 'hidden'
+      }
+    },
+    '& .image-wrapper:hover': {
+      '& button': {
+        visibility: 'visible'
+      },
+      '& .profile-image': {
+        opacity: 0.5
       }
     },
     '& .profile-image': {
@@ -112,7 +121,7 @@ class Profile extends Component {
                 hidden='hidden'
                 onChange={this.handleImageChange}
               />
-              <Tooltip title='Edit profile picture' placement='left'>
+              <Tooltip title='Edit profile picture'>
                 <IconButton onClick={this.handleEditImage} className='button'>
                   <EditIcon color='primary' />
                 </IconButton>
