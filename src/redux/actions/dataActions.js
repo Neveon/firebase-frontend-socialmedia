@@ -126,6 +126,24 @@ export const deleteThought = thoughtId => dispatch => {
     .catch(err => console.log(err));
 };
 
+export const getUserData = userHandle => dispatch => {
+  dispatch({ type: LOADING_DATA });
+  axios
+    .get(`/user/${userHandle}`)
+    .then(res => {
+      dispatch({
+        type: SET_THOUGHT,
+        payload: res.data.thoughts
+      });
+    })
+    .catch(() => {
+      dispatch({
+        type: SET_THOUGHTS,
+        payload: null
+      });
+    });
+};
+
 // Clear errors - Fixes bug where error on submit post does not clear from state
 // action creator
 export const clearErrors = () => dispatch => {
