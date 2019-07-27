@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Thought from '../components/thought/Thought';
 import StaticProfile from '../components/profile/StaticProfile';
+import ThoughtSkeleton from '../util/ThoughtSkeleton';
+import ProfileSkeleton from '../util/ProfileSkeleton';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
@@ -44,7 +46,7 @@ export class user extends Component {
     const { thoughtIdParam } = this.state;
 
     const thoughtsMarkup = loading ? (
-      <p>Loading Data</p>
+      <ThoughtSkeleton />
     ) : thoughts === null ? (
       <p>No thoughts from this user</p>
     ) : !thoughtIdParam ? (
@@ -70,7 +72,7 @@ export class user extends Component {
         </Grid>
         <Grid item sm={4} xs={12}>
           {this.state.profile === null ? (
-            <p>Loading profile...</p>
+            <ProfileSkeleton />
           ) : (
             <StaticProfile profile={this.state.profile} />
           )}

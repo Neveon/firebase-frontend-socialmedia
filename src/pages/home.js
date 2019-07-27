@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import Thought from '../components/thought/Thought';
 import Profile from '../components/profile/Profile';
+import ThoughtSkeleton from '../util/ThoughtSkeleton';
 
 import { connect } from 'react-redux';
 import { getThoughts } from '../redux/actions/dataActions';
@@ -24,7 +25,7 @@ class Home extends Component {
         <Thought key={thought.thoughtId} thought={thought} />
       ))
     ) : (
-      <p>Loading...</p>
+      <ThoughtSkeleton />
     );
 
     return (

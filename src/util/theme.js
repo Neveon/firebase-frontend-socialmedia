@@ -47,5 +47,85 @@ export default {
     width: '100%',
     borderBottom: '1px solid rgba(0,0,0,0.1)',
     marginBottom: 5
+  },
+  paper: {
+    padding: 20
+  },
+  profile: {
+    '& .image-wrapper': {
+      textAlign: 'center',
+      position: 'relative',
+      '& button': {
+        position: 'absolute',
+        top: '40%',
+        left: '45%',
+        visibility: 'hidden'
+      }
+    },
+    '& .image-wrapper:hover': {
+      '& button': {
+        visibility: 'visible'
+      },
+      '& .profile-image': {
+        opacity: 0.4
+      }
+    },
+    '& .profile-image': {
+      width: 200,
+      height: 200,
+      objectFit: 'cover',
+      maxWidth: '100%',
+      borderRadius: '50%'
+    },
+    '& .profile-details': {
+      textAlign: 'center',
+      '& span, svg': {
+        verticalAlign: 'middle'
+      },
+      '& a': {
+        color: '#00897b'
+      }
+    },
+    '& hr': {
+      border: 'none',
+      margin: '0 0 10px 0'
+    },
+    '& svg.button': {
+      '&:hover': {
+        cursor: 'pointer'
+      }
+    }
+  },
+  buttons: {
+    textAlign: 'center',
+    '& a': {
+      margin: '20px 10px'
+    }
   }
+  // profile: {
+  //   '& .image-wrapper': {
+  //     textAlign: 'center',
+  //     position: 'relative'
+  //   },
+  //   '& .profile-image': {
+  //     width: 200,
+  //     height: 200,
+  //     objectFit: 'cover',
+  //     maxWidth: '100%',
+  //     borderRadius: '50%'
+  //   },
+  //   '& .profile-details': {
+  //     textAlign: 'center',
+  //     '& span, svg': {
+  //       verticalAlign: 'middle'
+  //     },
+  //     '& a': {
+  //       color: '#00897b'
+  //     }
+  //   },
+  //   '& hr': {
+  //     border: 'none',
+  //     margin: '0 0 10px 0'
+  //   }
+  // }
 };
