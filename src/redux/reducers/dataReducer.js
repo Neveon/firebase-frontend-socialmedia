@@ -68,7 +68,7 @@ export default function(state = initialState, action) {
         ...state,
         thought: {
           ...state.thought,
-          comments: [action.payload, ...state.thought.comments]
+          comments: [...state.thought.comments, action.payload]
         }
       };
     default:

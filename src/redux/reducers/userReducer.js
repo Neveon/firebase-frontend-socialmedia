@@ -58,10 +58,6 @@ export default (state = initialState, action) => {
       state.notifications.forEach(notif => (notif.read = true));
       return {
         ...state
-        // notifications: state.notifications.map(notif => {
-        //   notif.read = true;
-        //   return notif;
-        // })
       };
     default:
       return state;
