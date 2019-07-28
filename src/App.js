@@ -23,8 +23,7 @@ import login from './pages/login';
 import signup from './pages/signup';
 import user from './pages/user';
 
-axios.defaults.baseURL =
-  'https://us-central1-social-media-4c489.cloudfunctions.net/api';
+axios.defaults.baseURL = 'https://FIREBASE-PROJECT-URL.cloudfunctions.net/api';
 
 const theme = createMuiTheme(themeFile);
 
