@@ -23,6 +23,9 @@ import login from './pages/login';
 import signup from './pages/signup';
 import user from './pages/user';
 
+axios.defaults.baseURL =
+  'https://us-central1-social-media-4c489.cloudfunctions.net/api';
+
 const theme = createMuiTheme(themeFile);
 
 const token = localStorage.FBIdToken;
